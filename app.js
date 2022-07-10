@@ -26,6 +26,18 @@ server.get('/', (req, res) => {
   res.render('home')
 })
 
+server.get('/campgrounds', async (req, res) => {
+  const campgrounds = await Campground.find({})
+  res.render('campgrounds/index', { campgrounds })
+
+  // Campground.find({}, (err, allCampgrounds) => {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     res.render('campgrounds', { campgrounds: allCampgrounds })
+  //   }
+  // })
+})
 server.get('/makecampground', async (req, res) => {
   const camp = new Campground({
     title: 'My Backyard',
