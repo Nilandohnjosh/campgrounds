@@ -1,6 +1,7 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const server = express()
+const mongoose = require('mongoose')
+const ejsMate = require('ejs-mate')
 const path = require('path')
 const methodOverride = require('method-override')
 
@@ -18,6 +19,7 @@ db.once('open', () => {
   console.log('connected to mongodb')
 })
 
+server.engine('ejs', ejsMate)
 server.set('view engine', 'ejs')
 server.set('views', path.join(__dirname, 'views'))
 
