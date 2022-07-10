@@ -21,6 +21,7 @@ server.set('view engine', 'ejs')
 server.set('views', path.join(__dirname, 'views'))
 
 server.use(express.static('public'))
+server.use(express.urlencoded({ extended: true }))
 
 server.get('/', (req, res) => {
   res.render('home')
@@ -29,7 +30,6 @@ server.get('/', (req, res) => {
 server.get('/campgrounds', async (req, res) => {
   const campgrounds = await Campground.find({})
   res.render('campgrounds/index', { campgrounds })
-
   // Campground.find({}, (err, allCampgrounds) => {
   //   if (err) {
   //     console.log(err)
@@ -38,6 +38,30 @@ server.get('/campgrounds', async (req, res) => {
   //   }
   // })
 })
+
+server.get('/campgrounds/new', (req, res) => {
+  res.render('campgrounds/new')
+})
+
+server.post('/campgrounds', async (req, res) => {
+  const campground = await Campground.create(req.body.campground)
+  await campground.save()
+  res.redirect(`/campgrounds/${campground._id}`)
+})
+
+server.get('/campgrounds/:id', async (req, res) => {
+  const { id } = req.params
+  const campground = await Campground.findById(id)
+  // Campground.findById(id, (err, foundCampground) => {
+  //   if (err) {
+  //     console.log(err)
+  //   } else {
+  //     res.render('campgrounds/show', { campground: foundCampground })
+  //   }
+  // })
+  res.render('campgrounds/show', { campground })
+})
+
 server.get('/makecampground', async (req, res) => {
   const camp = new Campground({
     title: 'My Backyard',
