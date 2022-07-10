@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const server = express()
 const path = require('path')
+const methodOverride = require('method-override')
 
 const Campground = require('/Users/nilandohnngaoluangraj/webdev/udemy/Web Developer Bootcamp/section39/models/campgroud.js')
 
@@ -22,6 +23,7 @@ server.set('views', path.join(__dirname, 'views'))
 
 server.use(express.static('public'))
 server.use(express.urlencoded({ extended: true }))
+server.use(methodOverride('_method'))
 
 server.get('/', (req, res) => {
   res.render('home')
@@ -30,13 +32,6 @@ server.get('/', (req, res) => {
 server.get('/campgrounds', async (req, res) => {
   const campgrounds = await Campground.find({})
   res.render('campgrounds/index', { campgrounds })
-  // Campground.find({}, (err, allCampgrounds) => {
-  //   if (err) {
-  //     console.log(err)
-  //   } else {
-  //     res.render('campgrounds', { campgrounds: allCampgrounds })
-  //   }
-  // })
 })
 
 server.get('/campgrounds/new', (req, res) => {
@@ -52,14 +47,27 @@ server.post('/campgrounds', async (req, res) => {
 server.get('/campgrounds/:id', async (req, res) => {
   const { id } = req.params
   const campground = await Campground.findById(id)
-  // Campground.findById(id, (err, foundCampground) => {
-  //   if (err) {
-  //     console.log(err)
-  //   } else {
-  //     res.render('campgrounds/show', { campground: foundCampground })
-  //   }
-  // })
   res.render('campgrounds/show', { campground })
+})
+
+server.get('/campgrounds/:id/edit', async (req, res) => {
+  const { id } = req.params
+  const campground = await Campground.findById(id)
+  res.render('campgrounds/edit', { campground })
+})
+
+server.put('/campgrounds/:id', async (req, res) => {
+  const { id } = req.params
+  const campground = await Campground.findByIdAndUpdate(id, {
+    ...req.body.campground,
+  })
+  res.redirect(`/campgrounds/${campground._id}`)
+})
+
+server.delete('/campgrounds/:id', async (req, res) => {
+  const { id } = req.params
+  await Campground.findByIdAndDelete(id)
+  res.redirect('/campgrounds')
 })
 
 server.get('/makecampground', async (req, res) => {
