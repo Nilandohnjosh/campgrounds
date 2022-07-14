@@ -5,7 +5,7 @@ const ejsMate = require('ejs-mate')
 const path = require('path')
 const methodOverride = require('method-override')
 
-const Campground = require('/Users/nilandohnngaoluangraj/webdev/udemy/Web Developer Bootcamp/section39/models/campgroud.js')
+const Campground = require('./models/campground.js')
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
   useNewUrlParser: true,

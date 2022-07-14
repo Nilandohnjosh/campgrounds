@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const path = require('path')
 
-const Campground = require('../models/campgroud')
+const Campground = require('../models/campground')
 const cities = require('../seeds/cities')
 const { places, descriptors } = require('../seeds/seedHelpers')
 
@@ -21,7 +21,7 @@ const sample = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
 const seedDb = async () => {
   await Campground.deleteMany({})
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 10; i++) {
     const random1000 = Math.floor(Math.random() * 1000)
     const price = Math.floor(Math.random() * 20) + 10
     const camp = new Campground({
