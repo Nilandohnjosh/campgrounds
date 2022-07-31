@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router({ mergeParams: true })
 
-const catchAsync = require('../utils/catchAsync')
-const ExpressError = require('../utils/ExpressError')
+const Campground = require('../models/campground')
+const Review = require('../models/review')
+
 const { reviewSchema } = require('../schemas.js')
 
-const Campground = require('../models/campground.js')
-const Review = require('../models/review.js')
+const ExpressError = require('../utils/ExpressError')
+const catchAsync = require('../utils/catchAsync')
 
 const validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body)
@@ -40,11 +41,6 @@ router.delete(
     await Review.findByIdAndDelete(reviewId)
     req.flash('success', 'Successfully deleted review')
     res.redirect(`/campgrounds/${id}`)
-    // const campground = await Campground.findById(id)
-    // const review = await Review.findByIdAndDelete(reviewId)
-    // campground.reviews.pull(review)
-    // await campground.save()
-    // res.redirect(`/campgrounds/${campground._id}`)
   })
 )
 
