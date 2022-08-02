@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
@@ -16,7 +20,9 @@ const reviewRoutes = require('./routes/reviews')
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
   useNewUrlParser: true,
+  useCreateIndex: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 })
 
 const db = mongoose.connection
@@ -53,7 +59,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 
-// how to store users in the session
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
